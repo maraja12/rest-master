@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <!-- create table profession-->
+    <changeSet id="create-profession" author="d.savic">
+        <sqlFile path="ddl/create-profession.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+    <!-- create table employee-->
+    <changeSet id="create-employee" author="d.savic">
+        <sqlFile path="ddl/create-employee.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+</databaseChangeLog>

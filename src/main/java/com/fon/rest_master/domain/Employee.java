@@ -23,7 +23,7 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
     @NotEmpty(message = "Employee name is mandatory!")
     @Size(max = 30, message = "Maximum length of name is 30 characters!")
     @Pattern(regexp = "^[A-Ž].*", message = "Name has to start with an uppercase letter from A to Ž!")

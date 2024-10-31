@@ -45,7 +45,7 @@ public class Employee {
     @NotNull(message = "Employee email is mandatory!")
     @Size(max = 30, message = "Maximum length of email is 30 characters!")
     @Pattern(regexp = "^.*@.*\\..*$", message = "Email has to match standard format!")
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @ManyToOne(optional = false)

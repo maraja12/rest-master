@@ -6,7 +6,7 @@ create table employee(
     constraint ck_surname_capitalized check ( name like '[A-Ž]%' ),
     birthday date not null,
     address nvarchar(50) not null,
-    email varchar(30) not null,
+    email varchar(30) not null unique,
     constraint ck_email_format check ( email like '%_@_%._%' ),
     profession_id bigint not null,
     primary key (id),

@@ -21,8 +21,7 @@ public class Profession {
     @Column(name = "id")
     private Long id;
     @NotEmpty(message = "Name of profession is mandatory!")
-    @Size(max = 30, message = "Maximum length of name is 30 characters!")
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
 

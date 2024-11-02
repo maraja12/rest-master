@@ -17,7 +17,6 @@ public class ProfessionDto implements Serializable {
 
     private Long id;
     @NotEmpty(message = "Name of profession is mandatory!")
-    @Size(max = 30, message = "Maximum length of name is 30 characters!")
     private String name;
 
 }

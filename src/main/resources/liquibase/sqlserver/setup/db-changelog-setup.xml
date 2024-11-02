@@ -11,4 +11,8 @@
     <changeSet id="create-employee" author="d.savic">
         <sqlFile path="ddl/create-employee.sql" relativeToChangelogFile="true"/>
     </changeSet>
+    <!-- create table project-->
+    <changeSet id="create-project" author="d.savic">
+        <sqlFile path="ddl/create-project.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>

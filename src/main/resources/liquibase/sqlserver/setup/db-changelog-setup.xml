@@ -4,15 +4,19 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <!-- create table profession-->
-    <changeSet id="create-profession" author="d.savic">
+    <changeSet id="create-profession" author="marija">
         <sqlFile path="ddl/create-profession.sql" relativeToChangelogFile="true"/>
     </changeSet>
     <!-- create table employee-->
-    <changeSet id="create-employee" author="d.savic">
+    <changeSet id="create-employee" author="marija">
         <sqlFile path="ddl/create-employee.sql" relativeToChangelogFile="true"/>
     </changeSet>
     <!-- create table project-->
-    <changeSet id="create-project" author="d.savic">
+    <changeSet id="create-project" author="marija">
         <sqlFile path="ddl/create-project.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+    <!-- create table engagement-->
+    <changeSet id="create-engagement" author="marija">
+        <sqlFile path="ddl/create-engagement.sql" relativeToChangelogFile="true"/>
     </changeSet>
 </databaseChangeLog>

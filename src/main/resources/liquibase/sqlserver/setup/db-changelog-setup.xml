@@ -19,4 +19,8 @@
     <changeSet id="create-engagement" author="marija">
         <sqlFile path="ddl/create-engagement.sql" relativeToChangelogFile="true"/>
     </changeSet>
+    <!-- create table company-->
+    <changeSet id="create-company" author="marija">
+        <sqlFile path="ddl/create-company.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>

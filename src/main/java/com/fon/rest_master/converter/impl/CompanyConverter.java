@@ -1,5 +1,6 @@
-package com.fon.rest_master.converter;
+package com.fon.rest_master.converter.impl;
 
+import com.fon.rest_master.converter.DtoEntityConverter;
 import com.fon.rest_master.domain.Company;
 import com.fon.rest_master.dto.CompanyDto;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ public class CompanyConverter implements DtoEntityConverter<CompanyDto, Company>
                 .pib(company.getPib())
                 .name(company.getName())
                 .address(company.getAddress())
-                .email(company.getEmial())
+                .email(company.getEmail())
                 .build();
     }
 
@@ -22,7 +23,7 @@ public class CompanyConverter implements DtoEntityConverter<CompanyDto, Company>
                 .pib(companyDto.getPib())
                 .name(companyDto.getName())
                 .address(companyDto.getAddress())
-                .emial(companyDto.getEmail())
+                .email(companyDto.getEmail())
                 .build();
     }
 }

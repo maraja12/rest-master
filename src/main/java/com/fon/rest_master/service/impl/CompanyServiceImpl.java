@@ -1,6 +1,6 @@
 package com.fon.rest_master.service.impl;
 
-import com.fon.rest_master.converter.CompanyConverter;
+import com.fon.rest_master.converter.impl.CompanyConverter;
 import com.fon.rest_master.domain.Company;
 import com.fon.rest_master.dto.CompanyDto;
 import com.fon.rest_master.repository.CompanyRepository;
@@ -57,7 +57,7 @@ public class CompanyServiceImpl implements CompanyService {
             company.setPib(companyDto.getPib());
             company.setName(companyDto.getName());
             company.setAddress(companyDto.getAddress());
-            company.setEmial(companyDto.getEmail());
+            company.setEmail(companyDto.getEmail());
             company = companyRepository.save(company);
             return companyConverter.toDto(company);
         }

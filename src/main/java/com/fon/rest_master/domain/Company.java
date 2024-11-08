@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -28,5 +31,8 @@ public class Company {
     private String address;
     @NotNull(message = "Company email is mandatory!")
     @Column(name = "email", unique = true)
-    private String emial;
+    private String email;
+
+//    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE, orphanRemoval = true)
+//    private List<Invoice> invoices;
 }

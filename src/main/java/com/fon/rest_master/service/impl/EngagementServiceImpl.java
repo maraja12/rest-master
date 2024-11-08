@@ -66,14 +66,6 @@ public class EngagementServiceImpl implements EngagementService {
     @Override
     public EngagementDto getById(Long projectId, Long employeeId, Month month, int year)
             throws EntityNotFoundException {
-//        Optional<Project> projectOptional = projectRepository.findById(projectId);
-//        Optional<Employee> employeeOptional = employeeRepository.findById(employeeId);
-//        if (projectOptional.isEmpty()) {
-//            throw new EntityNotFoundException("Project with id = " + projectId + " is not found");
-//        }
-//        if (employeeOptional.isEmpty()) {
-//            throw new EntityNotFoundException("Employee with id = " + employeeId + " is not found");
-//        }
         Project project = findProjectById(projectId);
         Employee employee = findEmployeeById(employeeId);
         EngagementId id = new EngagementId(project, employee, month, year);
@@ -106,18 +98,6 @@ public class EngagementServiceImpl implements EngagementService {
 
     @Override
     public EngagementDto update(EngagementDto engagementDto) throws EntityNotFoundException {
-//        Optional<Project> projectOptional = projectRepository.findById(engagementDto.getProjectDto().getId());
-//        Optional<Employee> employeeOptional = employeeRepository.findById(engagementDto.getEmployeeDto().getId());
-//        if (projectOptional.isEmpty()) {
-//            throw new EntityNotFoundException("Project with id = " + engagementDto.getProjectDto().getId() +
-//                    " is not found");
-//        }
-//        if(employeeOptional.isEmpty()){
-//            throw new EntityNotFoundException("Employee with id = " + engagementDto.getEmployeeDto().getId() +
-//                    " is not found");
-//        }
-//        Project project = projectOptional.get();
-//        Employee employee = employeeOptional.get();
         Project project = findProjectById(engagementDto.getProjectDto().getId());
         Employee employee = findEmployeeById(engagementDto.getEmployeeDto().getId());
         EngagementId engagementId = new EngagementId(
@@ -136,14 +116,6 @@ public class EngagementServiceImpl implements EngagementService {
 
     @Override
     public void delete(Long projectId, Long employeeId, Month month, int year) throws EntityNotFoundException {
-//        Optional<Project> projectOptional = projectRepository.findById(projectId);
-//        Optional<Employee> employeeOptional = employeeRepository.findById(employeeId);
-//        if (projectOptional.isEmpty()) {
-//            throw new EntityNotFoundException("Project with id = " + projectId + " is not found");
-//        }
-//        if (employeeOptional.isEmpty()) {
-//            throw new EntityNotFoundException("Employee with id = " + employeeId + " is not found");
-//        }
         Project project = findProjectById(projectId);
         Employee employee = findEmployeeById(employeeId);
         EngagementId id = new EngagementId(project, employee, month, year);

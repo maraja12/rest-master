@@ -27,4 +27,8 @@
     <changeSet id="create-invoice" author="marija">
         <sqlFile path="ddl/create-invoice.sql" relativeToChangelogFile="true"/>
     </changeSet>
+    <!-- create table invoice-item-->
+    <changeSet id="create-invoice-item" author="marija">
+        <sqlFile path="ddl/create-invoice-item.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>

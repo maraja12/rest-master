@@ -18,8 +18,8 @@ public class InvoiceDto implements Serializable {
 
     @NotNull(message = "Invoice id is mandatory!")
     private Long id;
-    @NotNull(message = "Company is mandatory!")
-    private CompanyDto companyDto;
+    @NotNull(message = "Company pib is mandatory!")
+    private int pib;
     @NotNull(message = "Issue date is mandatory!")
     private LocalDate issueDate;
     private LocalDate paymentDate;

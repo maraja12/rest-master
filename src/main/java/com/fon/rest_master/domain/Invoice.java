@@ -22,6 +22,10 @@ public class Invoice {
     @EmbeddedId
     private InvoiceId id;
 
+    @MapsId("pib")
+    @ManyToOne
+    private Company company;
+
     @NotNull(message = "Issue date is mandatory!")
     @PastOrPresent(message = "Issue date must be a current or past date.")
     @Column(name = "issue_date")

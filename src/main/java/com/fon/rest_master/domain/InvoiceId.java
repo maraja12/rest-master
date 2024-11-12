@@ -16,10 +16,8 @@ import java.io.Serializable;
 @Embeddable
 public class InvoiceId implements Serializable {
 
+    @Column(name = "id")
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "company_pib")
-    private Company company;
-
-
+    @Column(name = "company_pib")
+    private int pib;
 }

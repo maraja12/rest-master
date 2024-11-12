@@ -17,7 +17,7 @@ public class InvoiceConverter implements DtoEntityConverter<InvoiceDto, Invoice>
     public InvoiceDto toDto(Invoice invoice) {
         return InvoiceDto.builder()
                 .id(invoice.getId().getId())
-                .companyDto(companyConverter.toDto(invoice.getId().getCompany()))
+                .pib(invoice.getId().getPib())
                 .issueDate(invoice.getIssueDate())
                 .paymentDate(invoice.getPaymentDate())
                 .status(invoice.getStatus())
@@ -29,7 +29,7 @@ public class InvoiceConverter implements DtoEntityConverter<InvoiceDto, Invoice>
         return Invoice.builder()
                 .id(InvoiceId.builder()
                         .id(invoiceDto.getId())
-                        .company(companyConverter.toEntity(invoiceDto.getCompanyDto()))
+                        .pib(invoiceDto.getPib())
                         .build())
                 .issueDate(invoiceDto.getIssueDate())
                 .paymentDate(invoiceDto.getPaymentDate())

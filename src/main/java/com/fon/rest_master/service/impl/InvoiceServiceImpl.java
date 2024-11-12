@@ -42,19 +42,17 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .collect(Collectors.toList());
     }
 
-    public Company findCompanyByPib(int pib){
+    public void doesCompanyExist(int pib){
         Optional<Company> company = companyRepository.findById(pib);
-        if(company.isPresent()){
-            return company.get();
-        }else{
+        if(company.isEmpty()) {
             throw new EntityNotFoundException("Company with pib = " + pib + " is not found");
         }
     }
 
     @Override
-    public InvoiceDto getById(Long id, int company_pib) throws EntityNotFoundException {
-        Company company = findCompanyByPib(company_pib);
-        InvoiceId invoiceId = new InvoiceId(id, company);
+    public InvoiceDto getById(Long id, int companyPib) throws EntityNotFoundException {
+        doesCompanyExist(companyPib);
+        InvoiceId invoiceId = new InvoiceId(id, companyPib);
         Optional<Invoice> invoiceOpt = invoiceRepository.findById(invoiceId);
         if(invoiceOpt.isPresent()){
             Invoice invoice = invoiceOpt.get();
@@ -62,7 +60,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         else{
             throw new EntityNotFoundException("Invoice with id = " + id + " and company pib " +
-                    company_pib + " is not found");
+                    companyPib + " is not found");
         }
     }
 
@@ -74,24 +72,25 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     @Transactional
     public InvoiceDto save(InvoiceDto invoiceDto) {
-        Optional<Company> companyOptional = companyRepository.findById(invoiceDto.getCompanyDto().getPib());
-        if(companyOptional.isEmpty()){
-            throw new EntityNotFoundException("Company with pib = " + invoiceDto.getCompanyDto().getPib() +
-                    " is not found");
+        Optional<Company> companyOpt = companyRepository.findById(invoiceDto.getPib());
+        if(companyOpt.isEmpty()) {
+            throw new EntityNotFoundException("Company with pib = " + invoiceDto.getPib() + " is not found");
         }
+        Company company = companyOpt.get();
         if(invoiceDto.getId() == 0){
             Long generatedId = generateNewId();
             invoiceDto.setId(generatedId);
         }
         Invoice invoice = invoiceConverter.toEntity(invoiceDto);
+        invoice.setCompany(company);
         invoice = invoiceRepository.save(invoice);
         return invoiceConverter.toDto(invoice);
     }
 
     @Override
     public InvoiceDto update(InvoiceDto invoiceDto) throws EntityNotFoundException {
-        Company company = findCompanyByPib(invoiceDto.getCompanyDto().getPib());
-        InvoiceId invoiceId = new InvoiceId(invoiceDto.getId(), company);
+        doesCompanyExist(invoiceDto.getPib());
+        InvoiceId invoiceId = new InvoiceId(invoiceDto.getId(), invoiceDto.getPib());
         Optional<Invoice> invoiceOpt = invoiceRepository.findById(invoiceId);
         if(invoiceOpt.isPresent()){
             Invoice invoice = invoiceOpt.get();
@@ -103,14 +102,14 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         else{
             throw new EntityNotFoundException("Invoice with id = " + invoiceId.getId() + " and company pib " +
-                    invoiceDto.getCompanyDto().getPib() + " is not found");
+                    invoiceDto.getPib() + " is not found");
         }
     }
 
     @Override
-    public void delete(Long id, int company_pib) throws EntityNotFoundException {
-        Company company = findCompanyByPib(company_pib);
-        InvoiceId invoiceId = new InvoiceId(id, company);
+    public void delete(Long id, int companyPib) throws EntityNotFoundException {
+        doesCompanyExist(companyPib);
+        InvoiceId invoiceId = new InvoiceId(id, companyPib);
         Optional<Invoice> invoiceOpt = invoiceRepository.findById(invoiceId);
         if(invoiceOpt.isPresent()){
             Invoice invoice = invoiceOpt.get();
@@ -118,7 +117,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         else{
             throw new EntityNotFoundException("Invoice with id = " + id + " and company pib " +
-                    company_pib + " is not found");
+                    companyPib + " is not found");
         }
     }
 }

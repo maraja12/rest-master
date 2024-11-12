@@ -8,8 +8,8 @@ import java.util.List;
 public interface InvoiceService {
 
     List<InvoiceDto> getAll();
-    InvoiceDto getById(Long id, int company_pib) throws EntityNotFoundException;
+    InvoiceDto getById(Long id, int companyPib) throws EntityNotFoundException;
     InvoiceDto save(InvoiceDto invoiceDto);
     InvoiceDto update(InvoiceDto invoiceDto) throws EntityNotFoundException;
-    void delete(Long id, int company_pib) throws EntityNotFoundException;
+    void delete(Long id, int companyPib) throws EntityNotFoundException;
 }

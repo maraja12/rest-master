@@ -120,4 +120,37 @@ public class InvoiceServiceImpl implements InvoiceService {
                     companyPib + " is not found");
         }
     }
+
+    @Override
+    public List<Object> findInvoicesByCompanyPib(int companyPib) throws EntityNotFoundException{
+        Optional<Company> companyOptional = companyRepository.findById(companyPib);
+        if(companyOptional.isPresent()){
+            return invoiceRepository.findInvoicesByCompanyPib(companyPib);
+        }
+        else{
+            throw new EntityNotFoundException("Company with pib = " + companyPib + " is not found");
+        }
+    }
+
+    @Override
+    public List<Object> findUnpaidInvoicesByCompanyPib(int companyPib) throws EntityNotFoundException {
+        Optional<Company> companyOptional = companyRepository.findById(companyPib);
+        if(companyOptional.isPresent()){
+            return invoiceRepository.findUnpaidInvoicesByCompanyPib(companyPib);
+        }
+        else{
+            throw new EntityNotFoundException("Company with pib = " + companyPib + " is not found");
+        }
+    }
+
+    @Override
+    public Object getTotalDeptByCompanyPib(int companyPib) throws EntityNotFoundException {
+        Optional<Company> companyOptional = companyRepository.findById(companyPib);
+        if(companyOptional.isPresent()){
+            return invoiceRepository.getTotalDeptByCompanyPib(companyPib);
+        }
+        else{
+            throw new EntityNotFoundException("Company with pib = " + companyPib + " is not found");
+        }
+    }
 }

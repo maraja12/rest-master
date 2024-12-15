@@ -49,5 +49,20 @@ public class InvoiceController {
         return new ResponseEntity<>("Invoice with id = " + id + " and company pib " +
                 companyPib + " is deleted.", HttpStatus.OK);
     }
+    @GetMapping("/company/{company-pib}")
+    public ResponseEntity<List<Object>> getAllInvoicesByCompanyPib(@PathVariable("company-pib") int companyPib){
+        List<Object> details = invoiceService.findInvoicesByCompanyPib(companyPib);
+        return new ResponseEntity<>(details, HttpStatus.OK);
+    }
+    @GetMapping("/unpaid/company/{company-pib}")
+    public ResponseEntity<List<Object>> getAllUnpaidInvoicesByCompanyPib(@PathVariable("company-pib") int companyPib){
+        List<Object> details = invoiceService.findUnpaidInvoicesByCompanyPib(companyPib);
+        return new ResponseEntity<>(details, HttpStatus.OK);
+    }
+    @GetMapping("/total-dept/{company-pib}")
+    public ResponseEntity<Object> getTotalDeptByCompanyPib(@PathVariable("company-pib") int companyPib){
+        Object details = invoiceService.getTotalDeptByCompanyPib(companyPib);
+        return new ResponseEntity<>(details, HttpStatus.OK);
+    }
 
 }

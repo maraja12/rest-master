@@ -40,7 +40,7 @@ public class CompanyController {
         return new ResponseEntity<>(companyDtoUpdated, HttpStatus.OK);
     }
     @DeleteMapping("/{pib}")
-    public ResponseEntity<String> delete(int pib){
+    public ResponseEntity<String> delete(@PathVariable int pib){
         companyService.delete(pib);
         return new ResponseEntity<>("Company with pib = " + pib + " is deleted", HttpStatus.OK);
     }

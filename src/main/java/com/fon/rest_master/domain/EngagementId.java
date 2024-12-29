@@ -16,13 +16,11 @@ import java.io.Serializable;
 @Embeddable
 public class EngagementId implements Serializable {
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @Column(name = "project_id")
+    private Long projectId;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @Column(name = "employee_id")
+    private Long employeeId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "month")

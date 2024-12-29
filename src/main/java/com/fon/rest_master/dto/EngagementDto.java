@@ -16,10 +16,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class EngagementDto implements Serializable {
 
-    @NotNull(message = "Project is mandatory!")
-    private ProjectDto projectDto;
-    @NotNull(message = "Employee is mandatory!")
-    private EmployeeDto employeeDto;
+    @NotNull(message = "Project ID is mandatory!")
+    private Long projectId;
+    @NotNull(message = "Employee ID is mandatory!")
+    private Long employeeId;
     @NotNull(message = "Month is mandatory!")
     private Month month;
     @NotNull(message = "Year is mandatory!")

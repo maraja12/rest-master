@@ -30,4 +30,13 @@ public class InvoiceItem {
     @NotNull(message = "Price per hour is mandatory!")
     @Column(name = "price_per_hour", precision = 18, scale = 2)
     private BigDecimal pricePerHour;
+
+    @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "project_id", referencedColumnName = "project_id"),
+            @JoinColumn(name = "employee_id", referencedColumnName = "employee_id"),
+            @JoinColumn(name = "month", referencedColumnName = "month"),
+            @JoinColumn(name = "year", referencedColumnName = "year")
+    })
+    private Engagement engagement;
 }

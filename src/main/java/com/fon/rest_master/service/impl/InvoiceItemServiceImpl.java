@@ -1,11 +1,10 @@
 package com.fon.rest_master.service.impl;
 
+import com.fon.rest_master.converter.impl.EngagementConverter;
 import com.fon.rest_master.converter.impl.InvoiceItemConverter;
-import com.fon.rest_master.domain.Invoice;
-import com.fon.rest_master.domain.InvoiceId;
-import com.fon.rest_master.domain.InvoiceItem;
-import com.fon.rest_master.domain.InvoiceItemId;
+import com.fon.rest_master.domain.*;
 import com.fon.rest_master.dto.InvoiceItemDto;
+import com.fon.rest_master.repository.EngagementRepository;
 import com.fon.rest_master.repository.InvoiceItemRepository;
 import com.fon.rest_master.repository.InvoiceRepository;
 import com.fon.rest_master.service.InvoiceItemService;
@@ -22,13 +21,19 @@ public class InvoiceItemServiceImpl implements InvoiceItemService {
     private InvoiceItemRepository invoiceItemRepository;
     private InvoiceItemConverter invoiceItemConverter;
     private InvoiceRepository invoiceRepository;
+    private EngagementRepository engagementRepository;
+    private EngagementConverter engagementConverter;
 
     public InvoiceItemServiceImpl(InvoiceItemRepository invoiceItemRepository,
                                   InvoiceItemConverter invoiceItemConverter,
-                                  InvoiceRepository invoiceRepository) {
+                                  InvoiceRepository invoiceRepository,
+                                  EngagementRepository engagementRepository,
+                                  EngagementConverter engagementConverter) {
         this.invoiceItemRepository = invoiceItemRepository;
         this.invoiceItemConverter = invoiceItemConverter;
         this.invoiceRepository = invoiceRepository;
+        this.engagementRepository = engagementRepository;
+        this.engagementConverter = engagementConverter;
     }
 
     @Override
@@ -45,6 +50,23 @@ public class InvoiceItemServiceImpl implements InvoiceItemService {
                     + " and company pib = "
                     + invoiceId.getPib() + " is not found");
         }
+    }
+
+    private Engagement getEngagement(InvoiceItemDto invoiceItemDto){
+        EngagementId engagementId =
+                new EngagementId(invoiceItemDto.getEngagementDto().getProjectId(),
+                        invoiceItemDto.getEngagementDto().getEmployeeId(),
+                        invoiceItemDto.getEngagementDto().getMonth(),
+                        invoiceItemDto.getEngagementDto().getYear());
+        Optional<Engagement> engagementOptional = engagementRepository.findById(engagementId);
+        if(engagementOptional.isEmpty()){
+            throw new EntityNotFoundException("Engagement for project ID: "
+                    + invoiceItemDto.getEngagementDto().getProjectId() + " and employee ID: " +
+                    invoiceItemDto.getEngagementDto().getEmployeeId() + " for month: " +
+                    invoiceItemDto.getEngagementDto().getMonth() + " and year: " +
+                    invoiceItemDto.getEngagementDto().getYear() + " does not exist!");
+        }
+        return engagementOptional.get();
     }
 
     @Override
@@ -72,12 +94,14 @@ public class InvoiceItemServiceImpl implements InvoiceItemService {
                     + invoiceItemDto.getCompanyPib() + " is not found");
         }
         Invoice invoice = invoiceOpt.get();
+        Engagement engagement = getEngagement(invoiceItemDto);
         Long seqNo = invoiceItemRepository.findMaxSeqNoForInvoice(invoiceItemDto.getInvoiceId(),
                 invoiceItemDto.getCompanyPib()) + 1;
         InvoiceItemId invoiceItemId = new InvoiceItemId(seqNo, invoiceId);
         InvoiceItem invoiceItem = invoiceItemConverter.toEntity(invoiceItemDto);
         invoiceItem.setId(invoiceItemId);
         invoiceItem.setInvoice(invoice);
+        invoiceItem.setEngagement(engagement);
         invoiceItem = invoiceItemRepository.save(invoiceItem);
         return invoiceItemConverter.toDto(invoiceItem);
     }
@@ -87,6 +111,7 @@ public class InvoiceItemServiceImpl implements InvoiceItemService {
         InvoiceId invoiceId = new InvoiceId(invoiceItemDto.getInvoiceId(),
                 invoiceItemDto.getCompanyPib());
         doesInvoiceExist(invoiceId);
+        getEngagement(invoiceItemDto);
         InvoiceItemId invoiceItemId = new InvoiceItemId(invoiceItemDto.getSeqNum(), invoiceId);
         Optional<InvoiceItem> invoiceItemOpt = invoiceItemRepository.findById(invoiceItemId);
         if(invoiceItemOpt.isEmpty()){
@@ -97,6 +122,7 @@ public class InvoiceItemServiceImpl implements InvoiceItemService {
         InvoiceItem invoiceItem = invoiceItemOpt.get();
         invoiceItem.setDescription(invoiceItemDto.getDescription());
         invoiceItem.setPricePerHour(invoiceItemDto.getPricePerHour());
+        invoiceItem.setEngagement(engagementConverter.toEntity(invoiceItemDto.getEngagementDto()));
         invoiceItem = invoiceItemRepository.save(invoiceItem);
         return invoiceItemConverter.toDto(invoiceItem);
     }

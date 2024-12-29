@@ -5,10 +5,15 @@ import com.fon.rest_master.domain.InvoiceId;
 import com.fon.rest_master.domain.InvoiceItem;
 import com.fon.rest_master.domain.InvoiceItemId;
 import com.fon.rest_master.dto.InvoiceItemDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class InvoiceItemConverter implements DtoEntityConverter<InvoiceItemDto, InvoiceItem> {
+
+    @Autowired
+    private EngagementConverter engagementConverter;
+
     @Override
     public InvoiceItemDto toDto(InvoiceItem invoiceItem) {
         return InvoiceItemDto.builder()
@@ -17,6 +22,7 @@ public class InvoiceItemConverter implements DtoEntityConverter<InvoiceItemDto, 
                 .companyPib(invoiceItem.getId().getInvoiceId().getPib())
                 .description(invoiceItem.getDescription())
                 .pricePerHour(invoiceItem.getPricePerHour())
+                .engagementDto(engagementConverter.toDto(invoiceItem.getEngagement()))
                 .build();
     }
 
@@ -32,6 +38,7 @@ public class InvoiceItemConverter implements DtoEntityConverter<InvoiceItemDto, 
                         .build())
                 .description(invoiceItemDto.getDescription())
                 .pricePerHour(invoiceItemDto.getPricePerHour())
+                .engagement(engagementConverter.toEntity(invoiceItemDto.getEngagementDto()))
                 .build();
     }
 }

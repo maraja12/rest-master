@@ -1,5 +1,6 @@
 package com.fon.rest_master.dto;
 
+import com.fon.rest_master.domain.Month;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,4 +25,6 @@ public class InvoiceItemDto implements Serializable {
     private String description;
     @NotNull(message = "Price per hour is mandatory!")
     private BigDecimal pricePerHour;
+
+    private EngagementDto engagementDto;
 }

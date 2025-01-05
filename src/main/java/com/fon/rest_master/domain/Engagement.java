@@ -18,6 +18,12 @@ public class Engagement {
     @EmbeddedId
     @NotNull
     private EngagementId id;
+    @ManyToOne
+    @MapsId("projectId")
+    private Project project;
+    @ManyToOne
+    @MapsId("employeeId")
+    private Employee employee;
 
     @NotNull(message = "Employee role is mandatory!")
     @Enumerated(EnumType.STRING)

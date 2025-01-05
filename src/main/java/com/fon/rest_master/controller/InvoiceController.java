@@ -64,5 +64,13 @@ public class InvoiceController {
         Object details = invoiceService.getTotalDeptByCompanyPib(companyPib);
         return new ResponseEntity<>(details, HttpStatus.OK);
     }
+    @GetMapping("/invoice-projects/{company-pib}/{invoice-id}")
+    public ResponseEntity<Object> findProjectsForCertainCompanyInvoice(
+            @PathVariable("company-pib") int pib,
+            @PathVariable("invoice-id") Long invoiceId
+    ){
+        Object list = invoiceService.findProjectsForCertainCompanyInvoice(pib, invoiceId);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 
 }

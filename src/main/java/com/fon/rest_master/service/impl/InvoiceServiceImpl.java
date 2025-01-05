@@ -153,4 +153,15 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new EntityNotFoundException("Company with pib = " + companyPib + " is not found");
         }
     }
+
+    @Override
+    public Object findProjectsForCertainCompanyInvoice(int companyPib, Long invoiceId) throws EntityNotFoundException {
+        doesCompanyExist(companyPib);
+        Object list =  invoiceRepository.findProjectsForCertainCompanyInvoice(invoiceId, companyPib);
+        if(list == null){
+            throw new EntityNotFoundException("Invoice with id = " + invoiceId +
+                    " for certain company = " + companyPib + " is not found");
+        }
+        return list;
+    }
 }

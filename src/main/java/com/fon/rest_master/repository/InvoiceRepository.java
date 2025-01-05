@@ -2,11 +2,13 @@ package com.fon.rest_master.repository;
 
 import com.fon.rest_master.domain.Invoice;
 import com.fon.rest_master.domain.InvoiceId;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface InvoiceRepository extends JpaRepository<Invoice, InvoiceId> {
 
@@ -28,4 +30,16 @@ public interface InvoiceRepository extends JpaRepository<Invoice, InvoiceId> {
             "where i.status = 'UNPAID' and c.pib = :pib " +
             "GROUP BY c.name, c.pib, c.email")
     Object getTotalDeptByCompanyPib(@Param("pib") int companyPib);
+
+    //find name of projects for certain company invoice
+    @Query("select c.name AS companyName, " +
+            "       STRING_AGG(p.name, ',') AS projectNames  " +
+            "from InvoiceItem as it " +
+            "join it.invoice i " +
+            "join i.company c " +
+            "join it.engagement e " +
+            "join e.project p " +
+            "where i.id.id = :invoice_id and i.id.pib = :pib " +
+            "GROUP BY c.name, c.pib, c.email")
+    Object findProjectsForCertainCompanyInvoice(@Param("invoice_id") Long invoiceId, @Param("pib") int pib);
 }

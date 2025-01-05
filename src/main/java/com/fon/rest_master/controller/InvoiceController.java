@@ -72,5 +72,21 @@ public class InvoiceController {
         Object list = invoiceService.findProjectsForCertainCompanyInvoice(pib, invoiceId);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-
+    @GetMapping("/invoice-employees/{company-pib}/{invoice-id}")
+    public ResponseEntity<Object> findEmployeesForCertainCompanyInvoice(
+            @PathVariable("company-pib") int pib,
+            @PathVariable("invoice-id") Long invoiceId
+    ){
+        Object list = invoiceService.findEmployeesForCertainCompanyInvoice(pib, invoiceId);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    @GetMapping("/employee-role/{company-pib}/{invoice-id}/{seq-num}")
+    public ResponseEntity<Object> findEmployeeRoleOnProjectForCompanyInvoiceItem(
+            @PathVariable("company-pib") int pib,
+            @PathVariable("invoice-id") Long invoiceId,
+            @PathVariable("seq-num") int seqNum
+    ){
+        Object list = invoiceService.findEmployeeRoleOnProjectForCompanyInvoiceItem(pib, invoiceId, seqNum);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }

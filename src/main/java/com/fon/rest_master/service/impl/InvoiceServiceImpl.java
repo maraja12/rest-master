@@ -164,4 +164,27 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         return list;
     }
+
+    @Override
+    public Object findEmployeesForCertainCompanyInvoice(int pib, Long invoiceId) throws EntityNotFoundException {
+        doesCompanyExist(pib);
+        Object list =  invoiceRepository.findEmployeesForCertainCompanyInvoice(pib, invoiceId);
+        if(list == null){
+            throw new EntityNotFoundException("Invoice with id = " + invoiceId +
+                    " for certain company = " + pib + " is not found");
+        }
+        return list;
+    }
+
+    @Override
+    public Object findEmployeeRoleOnProjectForCompanyInvoiceItem(int pib, Long invoiceId, int seqNum) throws EntityNotFoundException {
+        doesCompanyExist(pib);
+        Object list =  invoiceRepository.findEmployeeRoleOnProjectForCompanyInvoiceItem(pib, invoiceId, seqNum);
+        if(list == null){
+            throw new EntityNotFoundException("Invoice with id = " + invoiceId +
+                    " or seqNum = "+ seqNum + " for certain company = " + pib + " is not found");
+        }
+        return list;
+    }
+
 }

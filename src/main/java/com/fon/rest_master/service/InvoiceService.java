@@ -17,4 +17,6 @@ public interface InvoiceService {
     List<Object> findUnpaidInvoicesByCompanyPib(int companyPib) throws EntityNotFoundException;
     Object getTotalDeptByCompanyPib(int companyPib) throws EntityNotFoundException;
     Object findProjectsForCertainCompanyInvoice(int companyPib, Long invoiceId) throws EntityNotFoundException;
+    Object findEmployeesForCertainCompanyInvoice(int pib, Long invoiceId) throws EntityNotFoundException;
+    Object findEmployeeRoleOnProjectForCompanyInvoiceItem(int pib, Long invoiceId, int seqNum) throws EntityNotFoundException;
 }

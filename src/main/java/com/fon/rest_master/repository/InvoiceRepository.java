@@ -42,4 +42,29 @@ public interface InvoiceRepository extends JpaRepository<Invoice, InvoiceId> {
             "where i.id.id = :invoice_id and i.id.pib = :pib " +
             "GROUP BY c.name, c.pib, c.email")
     Object findProjectsForCertainCompanyInvoice(@Param("invoice_id") Long invoiceId, @Param("pib") int pib);
+
+    //find employees id, name and surname for certain company invoice
+    @Query("select c.name AS companyName, " +
+            "string_agg(concat('id: ', e.id, ' ', e.name, ' ', e.surname), ', ') AS employees " +
+            "from InvoiceItem as it " +
+            "join it.invoice i " +
+            "join i.company c " +
+            "join it.engagement eng " +
+            "join eng.employee e " +
+            "where i.id.id = :invoice_id and i.id.pib = :pib " +
+            "GROUP BY c.name")
+    Object findEmployeesForCertainCompanyInvoice(@Param("pib") int pib, @Param("invoice_id") Long invoiceId);
+
+    //find role of employee on project for certain company invoice (invoice item)
+    @Query("select c.name AS companyName, " +
+            "eng.id.projectId as project_id, " +
+            "eng.id.employeeId as employee_id, " +
+            "eng.role as employee_role " +
+            "from InvoiceItem as it " +
+            "join it.invoice i " +
+            "join i.company c " +
+            "join it.engagement eng " +
+            "where it.id.invoiceId.id = :invoice_id and it.id.invoiceId.pib = :pib and it.id.seqNo = :seq_num")
+    Object findEmployeeRoleOnProjectForCompanyInvoiceItem(
+            @Param("pib") int pib, @Param("invoice_id") Long invoiceId, @Param("seq_num") int seqNum);
 }

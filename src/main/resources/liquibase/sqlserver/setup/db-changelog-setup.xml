@@ -15,6 +15,10 @@
     <changeSet id="create-project" author="marija">
         <sqlFile path="ddl/create-project.sql" relativeToChangelogFile="true"/>
     </changeSet>
+    <!-- create table place-->
+    <changeSet id="create-place" author="marija">
+        <sqlFile path="ddl/create-place.sql" relativeToChangelogFile="true"/>
+    </changeSet>
     <!-- create table engagement-->
     <changeSet id="create-engagement" author="marija">
         <sqlFile path="ddl/create-engagement.sql" relativeToChangelogFile="true"/>

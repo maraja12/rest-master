@@ -9,6 +9,8 @@ create table employee(
     address nvarchar(50) not null,
     email varchar(30) not null unique,
     constraint ck_email_format check ( email like '%_@_%._%' ),
+    age as datediff(year, birthday, getdate()),
+    constraint ck_age_limit check (datediff(year, birthday, getdate()) >= 18),
     profession_id bigint not null,
     primary key (id),
     constraint profession_fk foreign key (profession_id) references profession(id)

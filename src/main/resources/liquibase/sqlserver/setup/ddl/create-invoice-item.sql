@@ -2,7 +2,7 @@ create table invoice_item(
     seq_no bigint not null,
     invoice_id bigint not null,
     invoice_company_pib int not null,
-    description varchar(100),
+    description nvarchar(100),
     price_per_hour decimal(18, 2) not null,
     project_id bigint not null,
     employee_id bigint not null,

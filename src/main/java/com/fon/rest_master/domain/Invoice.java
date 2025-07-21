@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 @Data
@@ -36,4 +37,7 @@ public class Invoice {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
+
+//    @OneToMany(mappedBy = "invoice", fetch = FetchType.EAGER)
+//    private List<InvoiceItem> invoiceItems;
 }

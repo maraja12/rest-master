@@ -33,6 +33,10 @@ public class Company {
     @Column(name = "email", unique = true)
     private String email;
 
+    @ManyToOne
+    @JoinColumn(name="central_office", nullable = false)
+    private Place place;
+
 //    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE, orphanRemoval = true)
 //    private List<Invoice> invoices;
 }

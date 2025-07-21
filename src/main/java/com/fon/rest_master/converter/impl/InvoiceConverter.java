@@ -7,11 +7,15 @@ import com.fon.rest_master.dto.InvoiceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class InvoiceConverter implements DtoEntityConverter<InvoiceDto, Invoice> {
 
     @Autowired
     private CompanyConverter companyConverter;
+    @Autowired
+    private InvoiceItemConverter invoiceItemConverter;
 
     @Override
     public InvoiceDto toDto(Invoice invoice) {
@@ -21,6 +25,10 @@ public class InvoiceConverter implements DtoEntityConverter<InvoiceDto, Invoice>
                 .issueDate(invoice.getIssueDate())
                 .paymentDate(invoice.getPaymentDate())
                 .status(invoice.getStatus())
+//                .invoiceItems(
+//                        invoice.getInvoiceItems().stream().map(entity ->
+//                                invoiceItemConverter.toDto(entity)).collect(Collectors.toList())
+//                )
                 .build();
     }
 
@@ -34,6 +42,10 @@ public class InvoiceConverter implements DtoEntityConverter<InvoiceDto, Invoice>
                 .issueDate(invoiceDto.getIssueDate())
                 .paymentDate(invoiceDto.getPaymentDate())
                 .status(invoiceDto.getStatus())
+//                .invoiceItems(
+//                invoiceDto.getInvoiceItems().stream().map(dto ->
+//                        invoiceItemConverter.toEntity(dto)).collect(Collectors.toList())
+//        )
                 .build();
     }
 }

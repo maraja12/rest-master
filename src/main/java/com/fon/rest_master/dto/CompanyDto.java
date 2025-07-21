@@ -22,4 +22,6 @@ public class CompanyDto implements Serializable {
     private String address;
     @NotNull(message = "Company email is mandatory!")
     private String email;
+    @NotNull
+    private PlaceDto placeDto;
 }

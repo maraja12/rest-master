@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 @Data
@@ -25,4 +26,5 @@ public class InvoiceDto implements Serializable {
     private LocalDate paymentDate;
     @NotNull(message = "Status of invoice is mandatory!")
     private Status status;
+    private List<InvoiceItemDto> invoiceItems;
 }

@@ -1,12 +1,15 @@
 package com.fon.rest_master.service.impl;
 
 import com.fon.rest_master.converter.impl.InvoiceConverter;
-import com.fon.rest_master.domain.Company;
-import com.fon.rest_master.domain.Invoice;
-import com.fon.rest_master.domain.InvoiceId;
+import com.fon.rest_master.converter.impl.InvoiceItemConverter;
+import com.fon.rest_master.domain.*;
 import com.fon.rest_master.dto.InvoiceDto;
+import com.fon.rest_master.dto.InvoiceItemDto;
 import com.fon.rest_master.repository.CompanyRepository;
+import com.fon.rest_master.repository.EngagementRepository;
+import com.fon.rest_master.repository.InvoiceItemRepository;
 import com.fon.rest_master.repository.InvoiceRepository;
+import com.fon.rest_master.service.InvoiceItemService;
 import com.fon.rest_master.service.InvoiceService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,13 +29,22 @@ public class InvoiceServiceImpl implements InvoiceService {
     private InvoiceRepository invoiceRepository;
     private InvoiceConverter invoiceConverter;
     private CompanyRepository companyRepository;
+    private InvoiceItemRepository invoiceItemRepository;
+    private EngagementRepository engagementRepository;
+    private InvoiceItemConverter invoiceItemConverter;
 
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository,
-                              InvoiceConverter invoiceConverter,
-                              CompanyRepository companyRepository) {
+    public InvoiceServiceImpl(EntityManager entityManager, InvoiceRepository invoiceRepository,
+                              InvoiceConverter invoiceConverter, CompanyRepository companyRepository,
+                              InvoiceItemRepository invoiceItemRepository,
+                              EngagementRepository engagementRepository,
+                              InvoiceItemConverter invoiceItemConverter) {
+        this.entityManager = entityManager;
         this.invoiceRepository = invoiceRepository;
         this.invoiceConverter = invoiceConverter;
         this.companyRepository = companyRepository;
+        this.invoiceItemRepository = invoiceItemRepository;
+        this.engagementRepository = engagementRepository;
+        this.invoiceItemConverter = invoiceItemConverter;
     }
 
     @Override
@@ -69,9 +81,27 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .getSingleResult();
     }
 
+    private Engagement getEngagement(InvoiceItem invoiceItem){
+        EngagementId engagementId =
+                new EngagementId(invoiceItem.getEngagement().getId().getProjectId(),
+                        invoiceItem.getEngagement().getId().getEmployeeId(),
+                        invoiceItem.getEngagement().getId().getMonth(),
+                        invoiceItem.getEngagement().getId().getYear());
+        Optional<Engagement> engagementOptional = engagementRepository.findById(engagementId);
+        if(engagementOptional.isEmpty()){
+            throw new EntityNotFoundException("Engagement for project ID: "
+                    + invoiceItem.getEngagement().getId().getProjectId() + " and employee ID: " +
+                    invoiceItem.getEngagement().getId().getEmployeeId() + " for month: " +
+                    invoiceItem.getEngagement().getId().getMonth() + " and year: " +
+                    invoiceItem.getEngagement().getId().getYear() + " does not exist!");
+        }
+        return engagementOptional.get();
+    }
+
     @Override
     @Transactional
     public InvoiceDto save(InvoiceDto invoiceDto) {
+        Invoice invoice = invoiceConverter.toEntity(invoiceDto);
         Optional<Company> companyOpt = companyRepository.findById(invoiceDto.getPib());
         if(companyOpt.isEmpty()) {
             throw new EntityNotFoundException("Company with pib = " + invoiceDto.getPib() + " is not found");
@@ -81,9 +111,25 @@ public class InvoiceServiceImpl implements InvoiceService {
             Long generatedId = generateNewId();
             invoiceDto.setId(generatedId);
         }
-        Invoice invoice = invoiceConverter.toEntity(invoiceDto);
         invoice.setCompany(company);
         invoice = invoiceRepository.save(invoice);
+
+        List<InvoiceItem> invoiceItems = invoiceDto.getInvoiceItems()
+                .stream().map(dto -> invoiceItemConverter.toEntity(dto))
+                .toList();
+        for(InvoiceItem invoiceItem : invoiceItems){
+            Optional<InvoiceItem> invoiceItemOpt = invoiceItemRepository.findById(invoiceItem.getId());
+            if(invoiceItemOpt.isEmpty()){
+                Engagement engagement = getEngagement(invoiceItem);
+                invoiceItem.setEngagement(engagement);
+
+                InvoiceItemId invoiceItemId = new InvoiceItemId(1L, invoice.getId());
+                invoiceItem.setId(invoiceItemId);
+                invoiceItem.setInvoice(invoice);
+                invoiceItemRepository.save(invoiceItem);
+            }
+        }
+//        invoice.setInvoiceItems(invoiceItems);
         return invoiceConverter.toDto(invoice);
     }
 
